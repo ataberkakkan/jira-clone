@@ -1,3 +1,5 @@
+"use client";
+
 import { z } from "zod";
 
 import { FcGoogle } from "react-icons/fc";
@@ -20,9 +22,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useLogin } from "../api/useLogin";
+import { Loader } from "lucide-react";
 
 export const SignInCard = () => {
-  const { mutate } = useLogin();
+  const { mutate, isPending } = useLogin();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -57,6 +60,7 @@ export const SignInCard = () => {
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={isPending}
                       type="email"
                       placeholder="Enter email address"
                     />
@@ -74,6 +78,7 @@ export const SignInCard = () => {
                   <FormControl>
                     <Input
                       {...field}
+                      disabled={isPending}
                       type="password"
                       placeholder="Enter password"
                     />
@@ -83,8 +88,8 @@ export const SignInCard = () => {
               )}
             />
 
-            <Button disabled={false} size="lg" className="w-full">
-              Login
+            <Button size="lg" className="w-full">
+              {isPending ? <Loader className="size-5 animate-spin" /> : "Login"}
             </Button>
           </form>
         </Form>
@@ -95,22 +100,12 @@ export const SignInCard = () => {
       </div>
 
       <CardContent className="p-7 flex flex-col gap-y-4">
-        <Button
-          disabled={false}
-          variant="secondary"
-          size="lg"
-          className="w-full"
-        >
+        <Button variant="secondary" size="lg" className="w-full">
           <FcGoogle className="mr-2 size-5" />
           Login with Google
         </Button>
 
-        <Button
-          disabled={false}
-          variant="secondary"
-          size="lg"
-          className="w-full"
-        >
+        <Button variant="secondary" size="lg" className="w-full">
           <FaGithub className="mr-2 size-5" />
           Login with Github
         </Button>
